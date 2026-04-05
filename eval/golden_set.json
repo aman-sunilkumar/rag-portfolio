@@ -1,0 +1,22 @@
+[
+  {
+    "question": "What is Retrieval Augmented Generation (RAG)?",
+    "ground_truth": "RAG combines retrieval-based and generative AI. When a question is asked, relevant documents are retrieved from a knowledge base, and an LLM uses both the question and retrieved documents to generate a grounded, cited answer."
+  },
+  {
+    "question": "What is ChromaDB used for?",
+    "ground_truth": "ChromaDB is an open-source vector database that stores and retrieves embeddings efficiently, commonly used in RAG pipelines."
+  },
+  {
+    "question": "What paper introduced the transformer architecture?",
+    "ground_truth": "The transformer architecture was introduced in the paper 'Attention is All You Need' in 2017."
+  },
+  {
+    "question": "What is BM25?",
+    "ground_truth": "BM25 is a classical keyword-based retrieval algorithm that scores documents based on term frequency and inverse document frequency."
+  },
+  {
+    "question": "What is the relationship between deep learning and machine learning?",
+    "ground_truth": "Deep learning is a subset of machine learning that uses neural networks with many layers to analyze complex patterns."
+  }
+]

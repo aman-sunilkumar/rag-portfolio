@@ -1,0 +1,36 @@
+Artificial Intelligence and Machine Learning: A Primer
+
+Artificial intelligence (AI) refers to the simulation of human intelligence
+processes by computer systems, including learning, reasoning, and self-correction.
+
+Machine learning (ML) is a subset of AI that enables systems to learn and improve
+from experience without being explicitly programmed. ML focuses on developing
+programs that access data and learn from it autonomously.
+
+Deep learning is a subset of ML that uses neural networks with many layers to
+analyze complex patterns. It has revolutionized fields like computer vision and
+natural language processing.
+
+Retrieval Augmented Generation (RAG) combines retrieval-based and generative AI.
+When a question is asked, relevant documents are first retrieved from a knowledge
+base, and then an LLM uses both the question and retrieved documents to generate
+an accurate, grounded, and cited answer.
+
+Large Language Models (LLMs) are AI systems trained on vast amounts of text data.
+Examples include GPT-4o, Claude, and Llama. They perform tasks like summarization,
+translation, and question answering.
+
+Vector embeddings are numerical representations of text that capture semantic
+meaning. Similar texts have embeddings close together in vector space, enabling
+semantic search that goes beyond simple keyword matching.
+
+ChromaDB is an open-source vector database that stores and retrieves embeddings
+efficiently. It is commonly used in RAG pipelines for its simplicity and speed.
+
+The transformer architecture, introduced in the paper "Attention is All You Need"
+in 2017, is the foundation of modern LLMs. It uses self-attention mechanisms to
+process sequences in parallel, enabling much faster training than prior approaches.
+
+BM25 is a classical keyword-based retrieval algorithm. It scores documents based
+on term frequency and inverse document frequency. Combining BM25 with vector
+search (hybrid retrieval) often outperforms either method alone.
