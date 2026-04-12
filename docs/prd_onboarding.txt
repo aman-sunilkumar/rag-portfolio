@@ -1,0 +1,36 @@
+Product Requirements Document: Onboarding V2
+Author: Growth PM Team | Team: Growth | Q1 2025
+
+Executive Summary
+The Onboarding V2 initiative reduces time-to-value for new users from 14 days to 7 days.
+Current activation rate at day 7 is 42%. Target is 65% by end of Q2 2025.
+
+Problem Statement
+User research reveals three primary drop-off points:
+1. Account setup (23% drop-off): Too many required fields before value is shown.
+2. First action (31% drop-off): Users don't understand what to do first.
+3. Aha moment (19% drop-off): Users complete setup but don't hit the key value event.
+
+Proposed Solution
+Phase 1: Progressive onboarding - show value before requiring full account setup.
+Phase 2: Contextual tooltips and guided first actions based on user role.
+Phase 3: Personalized aha moment triggers based on user segment.
+
+Success Metrics
+- Day 7 activation rate: 42% -> 65%
+- Time to first key action: 3.2 days -> 1.5 days
+- 30-day retention: 58% -> 71%
+
+Timeline
+Week 1-2: UX research and design
+Week 3-4: Engineering build
+Week 5: A/B test launch
+Week 6-8: Measure and iterate
+
+Risk and Mitigations
+Risk: Engineering capacity conflict with platform migration.
+Mitigation: Phased rollout with feature flags to reduce scope if needed.
+
+Recommendation
+Prioritize Onboarding V2 as Q1 top initiative. Allocate 2 engineers and 1 designer.
+Expected ROI: 23% improvement in paid conversion based on cohort modeling.

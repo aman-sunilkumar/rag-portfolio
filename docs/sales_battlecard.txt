@@ -1,0 +1,37 @@
+Sales Battlecard: Competitive Positioning Q1 2025
+Author: Sales Enablement | Team: Sales | March 2025
+
+Product Overview
+Our platform delivers AI-powered workflow automation that reduces manual work by 60-80%.
+Key differentiators: fast deployment, no-code customization, enterprise security compliance.
+
+Against Competitor A
+Their weakness: long implementation timelines averaging 6-9 months.
+Our advantage: 2-week onboarding, 30-40% lower TCO over 3 years.
+Objection: "We already use Competitor A" -> Ask about their hidden implementation costs.
+
+Against Competitor B
+Their weakness: limited integration ecosystem with fewer than 50 native connectors.
+Our advantage: 200+ connectors, support and training included at no extra cost.
+Objection: "Competitor B is good enough" -> Use ROI calculator with their actual numbers.
+
+Key Proof Points
+- Customer A: 74% reduction in manual processing time, ROI in 4 months.
+- Customer B: 3x improvement in analyst productivity, $2.1M annual savings.
+- Customer C: Enterprise-wide deployment in 6 weeks with zero downtime.
+
+Discovery Questions
+1. What does your current process look like for this use case?
+2. How much time does your team spend on this manual task per week?
+3. What would a 70% reduction in that time mean for your team?
+4. Who else is involved in the purchasing decision?
+
+Pricing Guidance
+Standard: $X/seat/month, minimum 20 seats.
+Enterprise: Custom pricing with SLA, dedicated CSM, SSO included.
+Do not discount more than 20% without VP approval.
+Always push for annual upfront to improve unit economics.
+
+Objection: "It is too expensive"
+Reframe to TCO and ROI. Use the ROI calculator. Show 12-month payback period.
+Escalate to SE for a technical deep dive if the deal requires it.

@@ -1,0 +1,37 @@
+Engineering Architecture: API Gateway and Service Mesh
+Author: Platform Engineering | Team: Platform | August 2024
+
+Overview
+All external traffic routes through the API gateway before reaching microservices.
+We use Kong as our gateway for auth, rate limiting, routing, and SSL termination.
+
+Service Communication
+Internal services use gRPC for low-latency calls and Kafka for async events.
+Service discovery uses Consul. Each service registers itself on startup.
+
+Database Layer
+- PostgreSQL: primary transactional database, read replicas for reporting
+- Redis: caching, session storage, rate limit counters
+- Elasticsearch: full-text search and log aggregation
+- S3: object storage for files and model artifacts
+
+Deployment
+All services run as Docker containers on Kubernetes (EKS).
+CI/CD: GitHub Actions -> ECR -> ArgoCD for GitOps-based deployment.
+Blue/green deployments for zero-downtime releases.
+
+Observability
+- Metrics: Prometheus + Grafana
+- Tracing: Jaeger via OpenTelemetry
+- Logging: Fluentd -> Elasticsearch -> Kibana
+- Alerting: PagerDuty integration
+
+Performance Targets
+- P99 API latency: under 200ms
+- Availability: 99.9% uptime SLA
+- Throughput: 10,000 RPS sustained
+
+Roadmap
+Current bottleneck: database connection pooling under high load.
+Q3 2025: migrate to PgBouncer for connection pooling.
+Q4 2025: evaluate upgrade from Consul to Istio service mesh.

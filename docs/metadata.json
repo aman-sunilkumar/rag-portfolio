@@ -1,0 +1,42 @@
+{
+  "sample.txt": {
+    "doc_id": "ai_primer",
+    "doc_type": "reference",
+    "team": "general",
+    "role_relevance": ["engineer", "product_manager", "consultant", "sales_rep"],
+    "topic": "AI ML fundamentals RAG embeddings",
+    "tags": ["AI", "ML", "RAG", "embeddings", "transformers"],
+    "created_at": "2024-06-01",
+    "is_deprecated": false
+  },
+  "prd_onboarding.txt": {
+    "doc_id": "prd_onboarding_v2",
+    "doc_type": "PRD",
+    "team": "growth",
+    "role_relevance": ["product_manager", "consultant"],
+    "topic": "onboarding activation funnel conversion",
+    "tags": ["onboarding", "activation", "funnel", "conversion", "retention"],
+    "created_at": "2025-01-15",
+    "is_deprecated": false
+  },
+  "engineering_arch.txt": {
+    "doc_id": "eng_arch_v1",
+    "doc_type": "architecture",
+    "team": "platform",
+    "role_relevance": ["engineer", "consultant"],
+    "topic": "system architecture API infrastructure backend",
+    "tags": ["architecture", "API", "backend", "infrastructure", "kubernetes"],
+    "created_at": "2024-08-10",
+    "is_deprecated": false
+  },
+  "sales_battlecard.txt": {
+    "doc_id": "sales_battlecard_q1",
+    "doc_type": "battlecard",
+    "team": "sales",
+    "role_relevance": ["sales_rep", "consultant"],
+    "topic": "competitive pricing objections customer proof",
+    "tags": ["sales", "pricing", "competitors", "objections", "enterprise"],
+    "created_at": "2025-03-01",
+    "is_deprecated": false
+  }
+}
