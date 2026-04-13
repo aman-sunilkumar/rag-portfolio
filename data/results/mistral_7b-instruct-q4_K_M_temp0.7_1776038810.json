@@ -1,0 +1,134 @@
+[
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "reasoning_01",
+    "category": "reasoning",
+    "temperature": 0.7,
+    "tokens_generated": 154,
+    "duration_ms": 100779.3,
+    "ttft_ms": 7621.1,
+    "tokens_per_second": 1.5,
+    "response_preview": "First, let's calculate how many hours the journey will take:\n\n1. We know that the train travels at 8"
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "reasoning_02",
+    "category": "reasoning",
+    "temperature": 0.7,
+    "tokens_generated": 225,
+    "duration_ms": 149626.1,
+    "ttft_ms": 70266.5,
+    "tokens_per_second": 1.5,
+    "response_preview": "To find the total cost of buying 5 apples and 3 oranges, we need to multiply the price of each fruit"
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "reasoning_03",
+    "category": "reasoning",
+    "temperature": 0.7,
+    "tokens_generated": 133,
+    "duration_ms": 93167.2,
+    "ttft_ms": 44714.1,
+    "tokens_per_second": 1.4,
+    "response_preview": "15 students do not play football.\n\nHere's the reasoning:\n1. We know that there are 24 students in to"
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "summarize_01",
+    "category": "summarization",
+    "temperature": 0.7,
+    "tokens_generated": 60,
+    "duration_ms": 32914.2,
+    "ttft_ms": 18971.8,
+    "tokens_per_second": 1.8,
+    "response_preview": "The water cycle is a continuous process that involves the evaporation of water from the earth's surf"
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "summarize_02",
+    "category": "summarization",
+    "temperature": 0.7,
+    "tokens_generated": 44,
+    "duration_ms": 27754.8,
+    "ttft_ms": 11051.1,
+    "tokens_per_second": 1.6,
+    "response_preview": "Machine learning is an AI subfield involving the learning of tasks from data, and it enhances system"
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "extract_01",
+    "category": "extraction",
+    "temperature": 0.7,
+    "tokens_generated": 39,
+    "duration_ms": 27795.6,
+    "ttft_ms": 13074.9,
+    "tokens_per_second": 1.4,
+    "response_preview": "Company Name: TechCorp\nJob Title: Senior Data Engineer\nSalary Range: $130,000-$160,000 per year."
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "extract_02",
+    "category": "extraction",
+    "temperature": 0.7,
+    "tokens_generated": 19,
+    "duration_ms": 27224.6,
+    "ttft_ms": 13079.5,
+    "tokens_per_second": 0.7,
+    "response_preview": "Date: March 15th 2025\nEvent: Product Launch"
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "extract_03",
+    "category": "extraction",
+    "temperature": 0.7,
+    "tokens_generated": 16,
+    "duration_ms": 42115.9,
+    "ttft_ms": 38578.0,
+    "tokens_per_second": 0.4,
+    "response_preview": "Person Name: John Smith\nCity: Austin\nCompany: Stripe"
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "classify_01",
+    "category": "classification",
+    "temperature": 0.7,
+    "tokens_generated": 6,
+    "duration_ms": 17942.9,
+    "ttft_ms": 14471.4,
+    "tokens_per_second": 0.3,
+    "response_preview": "Classification: Negative"
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "classify_02",
+    "category": "classification",
+    "temperature": 0.7,
+    "tokens_generated": 11,
+    "duration_ms": 8562.8,
+    "ttft_ms": 1706.3,
+    "tokens_per_second": 1.3,
+    "response_preview": "The sentiment expressed in the input text is positive."
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "code_01",
+    "category": "code",
+    "temperature": 0.7,
+    "tokens_generated": 127,
+    "duration_ms": 79305.3,
+    "ttft_ms": 1609.8,
+    "tokens_per_second": 1.6,
+    "response_preview": "def even_numbers(numbers):\n    # Create an empty list to store the even numbers\n    even_list = []\n "
+  },
+  {
+    "model": "mistral:7b-instruct-q4_K_M",
+    "prompt_id": "code_02",
+    "category": "code",
+    "temperature": 0.7,
+    "tokens_generated": 167,
+    "duration_ms": 147726.1,
+    "ttft_ms": 2178.1,
+    "tokens_per_second": 1.1,
+    "response_preview": "def count_vowels(s):\n    # Create a set of vowels\n    vowels = set('aeiouAEIOU')\n    \n    # Initiali"
+  }
+]

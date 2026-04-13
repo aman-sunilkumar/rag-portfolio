@@ -1,0 +1,4 @@
+model,avg_tps,p50_tps,p95_ttft,avg_ttft,avg_duration,n_prompts
+llama3.2:3b,20.2,20.6,566.6,402.8,3385.9,12
+mistral:7b-instruct-q4_K_M,1.2,1.4,56212.7,19776.9,62909.6,12
+phi4-mini,16.8,18.2,1931.3,634.5,7574.0,12

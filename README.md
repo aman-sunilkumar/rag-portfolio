@@ -1,194 +1,116 @@
-# Personalization-Aware RAG System
+# Local LLM benchmarking tool
 
-> A memory-aware enterprise retrieval system that adapts document ranking using user role, session history, prior queries, and recency signals — so two people asking the same question get different, more relevant answers.
-
----
-
-## Why this project exists
-
-Standard RAG treats every user identically: same query → same retrieved chunks → same answer.
-
-This system does something different. It models **who is asking** and uses that signal to rerank retrieved evidence before generation. A product manager, an engineer, and a sales rep asking *"what are the key risks?"* should not get the same context. This project makes that possible.
+**Hardware:** Apple M1, 8GB unified memory  
+**Inference engine:** Ollama (Metal GPU acceleration)  
+**Test set:** 12 prompts across 5 categories (reasoning, summarization, extraction, classification, code)
 
 ---
 
-## Architecture
+## Models tested
 
-```
-User query
-    │
-    ▼
-┌─────────────────────────────┐
-│     Query Expander          │  GPT-4o rewrites query using
-│  (memory-aware rewrite)     │  session history + role context
-└─────────────┬───────────────┘
-              │ expanded query
-    ┌─────────▼──────────┐
-    │  Hybrid Retrieval  │  BM25 (keyword) + ChromaDB (semantic)
-    │  top-K candidates  │  merged via Reciprocal Rank Fusion
-    └─────────┬──────────┘
-              │ candidate pool
-    ┌─────────▼──────────────────────────────────────┐
-    │         Personalized Ranking Formula           │
-    │                                                │
-    │  score = 0.40 × semantic_rrf                   │
-    │        + 0.20 × bm25_rrf                       │
-    │        + 0.15 × recency_score                  │
-    │        + 0.15 × role_match_score               │
-    │        + 0.05 × history_match_score            │
-    │        + 0.05 × session_relevance_score        │
-    └─────────┬──────────────────────────────────────┘
-              │ reranked candidates
-    ┌─────────▼──────────┐
-    │  Cross-Encoder     │  ms-marco-MiniLM-L-6-v2
-    │  Reranking         │  scores query+chunk as a pair
-    └─────────┬──────────┘
-              │ top-N chunks with retrieval explanation
-    ┌─────────▼──────────┐
-    │  GPT-4o Generation │  citation-enforced, style-adapted
-    │  + Citation Guard  │  per user preference
-    └────────────────────┘
-```
+| Model | Params | Quantization | Disk size |
+|---|---|---|---|
+| llama3.2:3b | 3B | fp16 | ~2.0 GB |
+| phi4-mini | 3.8B | fp16 | ~2.5 GB |
+| mistral:7b-instruct-q4_K_M | 7B | Q4_K_M | ~4.1 GB |
 
-### Memory layers
+---
 
-| Layer | Storage | Contents |
+## Results
+
+### Overall performance
+
+| Model | Avg tok/s | P50 tok/s | Avg TTFT (ms) | P95 TTFT (ms) | Avg duration (ms) |
+|---|---|---|---|---|---|
+| llama3.2:3b | 20.2 | 20.6 | 402.8 | 566.6 | 3,385.9 |
+| phi4-mini | 16.8 | 18.2 | 634.5 | 1,931.3 | 7,574.0 |
+| mistral:7b-instruct-q4_K_M | 1.2 | 1.4 | 19,776.9 | 56,212.7 | 62,909.6 |
+
+### Performance by category (avg tok/s)
+
+| Category | llama3.2:3b | phi4-mini | mistral:7b-q4 |
+|---|---|---|---|
+| classification | 19.8 | 12.2 | 0.8 |
+| code | 21.0 | 18.8 | 1.4 |
+| extraction | 17.9 | 16.7 | 0.8 |
+| reasoning | 21.7 | 17.9 | 1.5 |
+| summarization | 21.0 | 18.0 | 1.7 |
+
+![Model comparison chart](reports/model_comparison.png)
+
+---
+
+## Key findings
+
+**1. Mistral 7B Q4 is not viable on M1 8GB**  
+At 1.2 tok/s average and a P95 TTFT of 56 seconds, Mistral is effectively unusable for interactive inference on this hardware. The Q4_K_M quantized model occupies ~4.1GB, leaving insufficient headroom in the 8GB unified memory pool for efficient Metal GPU utilization. For 7B+ models, 16GB unified memory (M1 Pro/Max) is the practical minimum.
+
+**2. Llama 3.2 3B is the best choice for M1 8GB**  
+20.2 tok/s average with a 403ms mean TTFT makes it genuinely responsive for interactive use. It was the fastest across every category and the most consistent (tight P50/avg spread).
+
+**3. Phi4-mini trades speed for reasoning depth**  
+Phi4-mini ran 17% slower than Llama 3B overall, but its reasoning task duration (11.9s vs 5.0s) suggests it generates longer, more thorough responses. For tasks where output quality matters more than latency, phi4-mini is worth the tradeoff.
+
+**4. Extraction tasks are fastest across all models**  
+Extraction prompts produced the shortest responses (factual, bounded output), leading to the lowest average duration for all three models. Code and reasoning tasks produced the longest responses.
+
+---
+
+## Temperature experiment
+
+Tested llama3.2:3b on 5 prompts, 3 runs each at temperature 0.0 and 0.7.
+
+| Prompt | Temp 0.0 | Temp 0.7 |
 |---|---|---|
-| User profile | SQLite | role, team, preferred doc types, answer style |
-| Session memory | SQLite | last 5 queries per user |
-| Feedback memory | SQLite | liked/disliked docs per user |
-| Document metadata | ChromaDB | doc type, team, role relevance, created_at, tags |
+| What is the capital of Australia? | identical | identical |
+| Name three programming languages used for data engineering | identical | 3 variants |
+| What does API stand for? | identical | 3 variants |
+| List two advantages of using vector databases | identical | 3 variants |
+| What is the difference between supervised and unsupervised learning? | identical | 3 variants |
+
+**Finding:** Temperature 0.0 is fully deterministic. At 0.7, single-answer factual prompts stay stable while open-ended prompts produce unique variants every run. For production extraction pipelines, temperature 0.0 is the correct choice.
 
 ---
 
-## Key results: personalization changes retrieval
+## Structured output pipeline
 
-Same question asked by three different users: *"What are the key risks and how should we handle them?"*
+Built a JSON extraction pipeline with Pydantic validation and a retry-with-reprompt loop:
 
-| User | Role | Top source retrieved | Role match score | Answer style |
-|---|---|---|---|---|
-| `pm_user` | Product Manager | `prd_onboarding.txt` | 1.0 | Concise with citations |
-| `eng_user` | Engineer | `engineering_arch.txt` | 1.0 | Technical depth |
-| `sales_user` | Sales Rep | `sales_battlecard.txt` | 1.0 | Bullet points |
-
-Query expansion example:
-
-```
-Raw query:    "What should we prioritize next?"
-pm_user:      "onboarding activation funnel Q1 growth team prioritization roadmap"
-eng_user:     "platform infrastructure API performance backend scaling priorities"
-sales_user:   "sales pipeline enterprise competitive deal prioritization Q1"
-```
+1. Prompt the model with a strict JSON schema at temperature 0.0
+2. Strip any markdown fences from the response
+3. Validate against a Pydantic model
+4. On failure, reprompt once with the specific validation error included
+5. Return None if both attempts fail — never hallucinate a fallback
 
 ---
 
-## Features
+## Recommendation
 
-- **Hybrid retrieval** — BM25 keyword search + vector semantic search merged with Reciprocal Rank Fusion
-- **Memory-aware query expansion** — GPT-4o rewrites queries using session history and user context
-- **Personalized ranking formula** — 6-signal weighted score combining retrieval relevance with user signals
-- **Cross-encoder reranking** — `ms-marco-MiniLM-L-6-v2` reads query+chunk pairs for final precision
-- **Retrieval explainability** — every chunk shows why it was boosted (role match, recency, session relevance)
-- **Citation enforcement** — system declines to answer if retrieved chunks don't support a response
-- **Cold/warm start handling** — new users fall back to pure semantic search; returning users get full personalization
-- **Answer style adaptation** — concise, technical, or bullet-point format based on user preference
-- **Persistent memory** — SQLite-backed profiles, sessions, and feedback survive across restarts
+For local inference on Apple Silicon M1 8GB:
 
----
-
-## Tech stack
-
-| Component | Tool |
-|---|---|
-| Orchestration | LangChain |
-| Vector store | ChromaDB |
-| Embeddings | OpenAI `text-embedding-3-small` |
-| LLM | GPT-4o |
-| Keyword retrieval | BM25Okapi (rank-bm25) |
-| Reranker | `cross-encoder/ms-marco-MiniLM-L-6-v2` |
-| Memory store | SQLite (via Python stdlib) |
-| Data validation | Pydantic v2 |
-| Config management | YAML (versioned prompts) |
-
----
-
-## Setup
-
-```bash
-# Clone and create environment
-git clone https://github.com/YOUR_USERNAME/rag-portfolio
-cd rag-portfolio
-python3.12 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-
-# Add your OpenAI API key
-echo "OPENAI_API_KEY=sk-your-key" > .env
-
-# Ingest documents
-python ingest.py
-
-# Seed demo user profiles
-python seed_profiles.py
-
-# Run interactive demo
-python personalized_rag.py
-```
+- **Interactive assistant / chatbot:** llama3.2:3b — best latency, fully usable
+- **Structured extraction pipeline:** llama3.2:3b at temp 0.0 — fast and deterministic
+- **Quality-sensitive reasoning tasks:** phi4-mini — worth the 2x latency tradeoff
+- **7B models:** Require 16GB+ unified memory — not viable on base M1
 
 ---
 
 ## Project structure
-
-```
-rag-portfolio/
-├── docs/
-│   ├── metadata.json          # maps documents to role/team/type metadata
-│   ├── prd_onboarding.txt     # PM-targeted document (Growth team)
-│   ├── engineering_arch.txt   # Engineer-targeted document (Platform team)
-│   └── sales_battlecard.txt   # Sales-targeted document
-├── memory/
-│   ├── schemas.py             # UserProfile, SessionMessage, FeedbackEvent
-│   └── store.py               # SQLite persistence layer
-├── personalized_retriever.py  # weighted ranking formula + cross-encoder
-├── personalized_rag.py        # main pipeline
-├── query_expander.py          # memory-aware query rewriting
-├── seed_profiles.py           # creates demo user personas
-├── ingest.py                  # document ingestion with metadata
-├── eval/
-│   └── compare_eval.py        # persona comparison evaluation
-└── prompts/
-    └── config.yaml            # versioned prompts + personalization weights
-```
-
----
-
-## Evaluation
-
-Run the persona comparison:
-
-```bash
-python eval/compare_eval.py
-```
-
-This runs the same question through all 3 personas and prints which sources each retrieved, showing personalization working end-to-end.
-
----
-
-## Design decisions
-
-**Why SQLite over Redis?** For a portfolio project, zero-dependency persistence is the right tradeoff. The architecture supports swapping in Redis or Postgres — the store interface is intentionally simple.
-
-**Why weight tuning in config.yaml?** Personalization weights are part of system behavior, not code. Versioning them alongside prompts means you can audit what changed when retrieval quality shifts.
-
-**Why citation enforcement?** Uncited answers are untrustworthy in enterprise contexts. The system declines to answer rather than hallucinate — a deliberate product decision, not a technical limitation.
-
-**Why cross-encoder after personalized ranking?** Personalization operates on metadata signals; the cross-encoder operates on semantic content. Running them in sequence gets the best of both.
-
----
-
-## What's next
-
-- [ ] FastAPI REST endpoint for multi-user serving
-- [ ] Learning-to-rank: update user weights based on click feedback
-- [ ] Memory decay: reduce weight of topics not touched in 60+ days
-- [ ] Langfuse observability integration (Project 3)
-- [ ] A/B eval: personalized vs. non-personalized retrieval precision@3
+local-llm-bench/
+├── README.md
+├── requirements.txt
+├── src/
+│   ├── ollama_client.py
+│   ├── api.py
+│   ├── benchmark.py
+│   ├── structured_runner.py
+│   ├── temperature_experiment.py
+│   ├── compare_models.py
+│   └── plot_results.py
+├── data/
+│   ├── prompts/
+│   │   └── benchmark_prompts.yaml
+│   └── results/
+└── reports/
+├── model_comparison.csv
+└── model_comparison.png

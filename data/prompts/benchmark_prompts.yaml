@@ -1,0 +1,48 @@
+prompts:
+  - id: "reasoning_01"
+    category: "reasoning"
+    text: "If a train travels at 80km/h and needs to cover 200km, how many minutes will the journey take? Show your working."
+
+  - id: "reasoning_02"
+    category: "reasoning"
+    text: "A store sells apples for $1.20 each and oranges for $0.80 each. If someone buys 5 apples and 3 oranges, what is the total cost?"
+
+  - id: "reasoning_03"
+    category: "reasoning"
+    text: "There are 24 students in a class. If 3/8 of them play football, how many students do not play football?"
+
+  - id: "summarize_01"
+    category: "summarization"
+    text: "Summarize in 2 sentences: The water cycle describes how water evaporates from the surface of the earth, rises into the atmosphere, cools and condenses into rain or snow in clouds, and falls again to the surface. This process repeats continuously and is essential for distributing freshwater around the planet."
+
+  - id: "summarize_02"
+    category: "summarization"
+    text: "Summarize in 2 sentences: Machine learning is a subset of artificial intelligence where systems learn from data to improve their performance on tasks without being explicitly programmed. It powers applications like spam filters, recommendation engines, and image recognition."
+
+  - id: "extract_01"
+    category: "extraction"
+    text: "Extract the company name, job title, and salary from this: 'We are hiring a Senior Data Engineer at TechCorp with a salary range of $130,000-$160,000 per year.'"
+
+  - id: "extract_02"
+    category: "extraction"
+    text: "From this sentence, extract the date and event: 'The product launch is scheduled for March 15th 2025 at our San Francisco headquarters.'"
+
+  - id: "extract_03"
+    category: "extraction"
+    text: "Extract the person name, city, and company from: 'John Smith, based in Austin, recently joined Stripe as their new Head of Engineering.'"
+
+  - id: "classify_01"
+    category: "classification"
+    text: "Classify the sentiment as positive, negative, or neutral: 'The delivery was late and the packaging was damaged, but the product itself works well.'"
+
+  - id: "classify_02"
+    category: "classification"
+    text: "Classify the sentiment as positive, negative, or neutral: 'Absolutely loved the experience. Would highly recommend to anyone.'"
+
+  - id: "code_01"
+    category: "code"
+    text: "Write a Python function that takes a list of integers and returns only the even numbers."
+
+  - id: "code_02"
+    category: "code"
+    text: "Write a Python function that takes a string and returns the number of vowels in it."
