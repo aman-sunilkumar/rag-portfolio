@@ -1,22 +1,22 @@
 [
   {
-    "question": "What is Retrieval Augmented Generation (RAG)?",
-    "ground_truth": "RAG combines retrieval-based and generative AI. When a question is asked, relevant documents are retrieved from a knowledge base, and an LLM uses both the question and retrieved documents to generate a grounded, cited answer."
+    "question": "What is the engineering architecture's approach to external traffic?",
+    "ground_truth": "All external traffic is routed through an API gateway before reaching microservices."
   },
   {
-    "question": "What is ChromaDB used for?",
-    "ground_truth": "ChromaDB is an open-source vector database that stores and retrieves embeddings efficiently, commonly used in RAG pipelines."
+    "question": "What tool is used as the API gateway and what does it handle?",
+    "ground_truth": "Kong is used as the gateway for authentication, rate limiting, routing, and SSL termination."
   },
   {
-    "question": "What paper introduced the transformer architecture?",
-    "ground_truth": "The transformer architecture was introduced in the paper 'Attention is All You Need' in 2017."
+    "question": "How do internal services communicate with each other?",
+    "ground_truth": "Internal services use gRPC for low-latency calls and Kafka for asynchronous events."
   },
   {
-    "question": "What is BM25?",
-    "ground_truth": "BM25 is a classical keyword-based retrieval algorithm that scores documents based on term frequency and inverse document frequency."
+    "question": "How is service discovery managed?",
+    "ground_truth": "Service discovery is managed by Consul, with each service registering itself on startup."
   },
   {
-    "question": "What is the relationship between deep learning and machine learning?",
-    "ground_truth": "Deep learning is a subset of machine learning that uses neural networks with many layers to analyze complex patterns."
+    "question": "What is Retrieval Augmented Generation?",
+    "ground_truth": "RAG combines retrieval-based and generative AI. Relevant documents are retrieved from a knowledge base and an LLM uses both the question and retrieved documents to generate a grounded answer."
   }
 ]

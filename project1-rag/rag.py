@@ -5,6 +5,7 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from retriever import HybridRetriever
+from metrics_store import log as log_metrics
 
 load_dotenv()
 
@@ -66,12 +67,30 @@ def query(question, retriever):
         {
             "source": c.metadata.get("source", "unknown"),
             "page": c.metadata.get("page", "?"),
-            "snippet": c.page_content[:200]
+            "snippet": c.page_content[:800]
         }
         for c in chunks
     ]
     return {"answer": answer, "sources": sources, "grounded": grounded}
 
+
+
+
+def traced_query(question, retriever):
+    """Instrumented version of query(). Use this in production."""
+    from tracing import traced_query as _traced
+    result = _traced(question, retriever, query_fn=query)
+    timing = result.pop("_timing", {})
+    log_metrics(
+        question=question,
+        ret_ms=timing.get("ret_ms", 0),
+        gen_ms=timing.get("gen_ms", 0),
+        prompt_tokens=result.get("prompt_tokens", 0),
+        completion_tokens=result.get("completion_tokens", 0),
+        grounded=result.get("grounded", False),
+        success=True,
+    )
+    return result
 
 if __name__ == "__main__":
     vs = load_vectorstore()
@@ -84,7 +103,7 @@ if __name__ == "__main__":
             break
         if not q:
             continue
-        result = query(q, retriever)
+        result = traced_query(q, retriever)
         print(f"\nAnswer:\n{result['answer']}\n")
         if result["sources"]:
             print("Sources:")

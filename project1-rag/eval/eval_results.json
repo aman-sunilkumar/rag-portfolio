@@ -1,0 +1,28 @@
+{
+  "avg_faithfulness": 0.28,
+  "threshold": 0.75,
+  "n": 5,
+  "passed": false,
+  "per_question": [
+    {
+      "question": "What is the engineering architecture's approach to external traffic?",
+      "score": 0.5
+    },
+    {
+      "question": "What tool is used as the API gateway and what does it handle?",
+      "score": 0.0
+    },
+    {
+      "question": "How do internal services communicate with each other?",
+      "score": 0.0
+    },
+    {
+      "question": "How is service discovery managed?",
+      "score": 0.0
+    },
+    {
+      "question": "What is Retrieval Augmented Generation?",
+      "score": 0.9
+    }
+  ]
+}

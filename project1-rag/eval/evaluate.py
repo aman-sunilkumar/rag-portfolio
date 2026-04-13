@@ -7,7 +7,7 @@ import yaml
 from openai import OpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain_chroma import Chroma
-from langchain.schema import Document
+from langchain_core.documents import Document
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -35,8 +35,33 @@ Respond ONLY with valid JSON (no markdown): {{"score": <float 0-1>, "reason": "<
         temperature=0,
         messages=[{"role": "user", "content": prompt}]
     )
-    result = json.loads(resp.choices[0].message.content)
-    return result["score"], result["reason"]
+    raw = resp.choices[0].message.content.strip()
+    raw = raw.strip('`')
+    if raw.startswith('json'):
+        raw = raw[4:].strip()
+    try:
+        result = json.loads(raw)
+        return result["score"], result["reason"]
+    except Exception:
+        return 0.5, "Could not parse judge response"
+
+
+
+def write_results(golden, scores, avg):
+    import json
+    from pathlib import Path
+    out = {
+        "avg_faithfulness": round(avg, 3),
+        "threshold": FAITHFULNESS_THRESHOLD,
+        "n": len(scores),
+        "passed": avg >= FAITHFULNESS_THRESHOLD,
+        "per_question": [
+            {"question": golden[i]["question"], "score": round(scores[i], 3)}
+            for i in range(len(scores))
+        ]
+    }
+    Path("eval/eval_results.json").write_text(json.dumps(out, indent=2))
+    print("Results written → eval/eval_results.json")
 
 
 def run_evaluation():
@@ -65,7 +90,7 @@ def run_evaluation():
 
     for i, item in enumerate(golden):
         result = query(item["question"], retriever)
-        contexts = [s["snippet"] for s in result["sources"]]
+        contexts = [s["snippet"] + "..." for s in result["sources"]]
         score, reason = score_faithfulness(item["question"], result["answer"], contexts)
         scores.append(score)
         status = "PASS" if score >= FAITHFULNESS_THRESHOLD else "FAIL"
@@ -77,6 +102,7 @@ def run_evaluation():
     print(f"Threshold        : {FAITHFULNESS_THRESHOLD}")
 
     if avg < FAITHFULNESS_THRESHOLD:
+        write_results(golden, scores, avg)
         print("RESULT: FAIL — build blocked.")
         sys.exit(1)
     else:
@@ -86,3 +112,4 @@ def run_evaluation():
 
 if __name__ == "__main__":
     run_evaluation()
+
