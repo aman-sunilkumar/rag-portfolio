@@ -7,6 +7,8 @@ Projects built to demonstrate production AI engineering skills.
 ### Project 1 — Production RAG system
 Domain-specific document Q&A with hybrid retrieval, re-ranking, citation enforcement, and CI-integrated evaluation.  
 → [`project1-rag/`](./project1-rag)
+![RAG eval gate](https://github.com/aman-sunilkumar/rag-portfolio/actions/workflows/eval.yml/badge.svg)
+
 
 ### Project 2 — Local LLM benchmarking tool
 Benchmarking open-source LLMs on Apple M1 — inference speed, structured output pipeline with Pydantic validation and retry, temperature variance analysis across 3 models.  
