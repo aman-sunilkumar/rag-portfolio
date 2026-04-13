@@ -25,6 +25,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Build vector store
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python ingest.py
+
       - name: Run RAG evaluation
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
